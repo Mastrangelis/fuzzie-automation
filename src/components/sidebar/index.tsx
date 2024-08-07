@@ -14,9 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Database, GitBranch, LucideMousePointerClick } from "lucide-react";
 import { ModeToggle } from "../global/mode-toggle";
 
-type Props = {};
-
-const MenuOptions = (props: Props) => {
+const MenuOptions = () => {
   const pathName = usePathname();
 
   return (

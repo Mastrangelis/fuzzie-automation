@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Computer } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -24,15 +25,27 @@ export function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+      <DropdownMenuContent align="end" className="ml-4 !min-w-[110px]">
+        <DropdownMenuItem
+          onClick={() => setTheme("light")}
+          className="flex items-center justify-between cursor-pointer"
+        >
+          <p>Light</p>
+          <Sun className="h-[1rem] w-[1rem]" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+        <DropdownMenuItem
+          onClick={() => setTheme("dark")}
+          className="flex items-center justify-between cursor-pointer"
+        >
+          <p>Dark</p>
+          <Moon className="h-[1rem] w-[1rem]" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+        <DropdownMenuItem
+          onClick={() => setTheme("system")}
+          className="flex items-center justify-between cursor-pointer"
+        >
+          <p>System</p>
+          <Computer className="h-[1rem] w-[1rem]" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
