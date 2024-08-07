@@ -1,52 +1,70 @@
 "use server";
 
-// export const async getUserByClerkId = async (clerkId: string) => {
-//     try {
-//         const user = await db.user.findUnique({ where: { clerkId: authUser.id } });
+import { db } from "../db";
 
-//     } catch {
+export const getUserByClerkId = async (clerkId: string) => {
+  try {
+    const user = await db.user.findUnique({
+      where: { clerkId: clerkId },
+    });
 
-//     }
-// }
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-//  const removeProfileImage = async () => {
-//    "use server";
-//    const response = await db.user.update({
-//      where: {
-//        clerkId: authUser.id,
-//      },
-//      data: {
-//        profileImage: "",
-//      },
-//    });
-//    return response;
-//  };
+    return user;
+  } catch (e) {
+    throw e;
+  }
+};
 
-//  const uploadProfileImage = async (image: string) => {
-//    "use server";
-//    const id = authUser.id;
-//    const response = await db.user.update({
-//      where: {
-//        clerkId: id,
-//      },
-//      data: {
-//        profileImage: image,
-//      },
-//    });
+export const removeProfileImage = async (clerkId: string) => {
+  try {
+    const updatedUser = await db.user.update({
+      where: {
+        clerkId,
+      },
+      data: {
+        profileImage: "",
+      },
+    });
 
-//    return response;
-//  };
+    return updatedUser;
+  } catch (e) {
+    throw e;
+  }
+};
 
-//  const updateUserInfo = async (name: string) => {
-//    "use server";
+export const uploadProfileImage = async (clerkId: string, image: string) => {
+  try {
+    const updatedUser = await db.user.update({
+      where: {
+        clerkId,
+      },
+      data: {
+        profileImage: image,
+      },
+    });
 
-//    const updateUser = await db.user.update({
-//      where: {
-//        clerkId: authUser.id,
-//      },
-//      data: {
-//        name,
-//      },
-//    });
-//    return updateUser;
-//  };
+    return updatedUser;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const updateUserInfo = async (clerkId: string, name: string) => {
+  try {
+    const updatedUser = await db.user.update({
+      where: {
+        clerkId,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return updatedUser;
+  } catch (e) {
+    throw e;
+  }
+};

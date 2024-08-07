@@ -1,14 +1,22 @@
-import ProfileForm from "@/components/forms/profile-form";
 import React from "react";
+import ProfileForm from "@/components/forms/profile-form";
+import { currentUser } from "@clerk/nextjs/server";
+import {
+  getUserByClerkId,
+  removeProfileImage,
+  updateUserInfo,
+  uploadProfileImage,
+} from "@/lib/actions/settings.actions";
 import ProfilePicture from "./_components/profile-picture";
-import { db } from "@/lib/db";
-import { currentUser } from "@clerk/nextjs";
 
-type Props = {};
+const Settings = async () => {
+  const clerkUser = await currentUser();
 
-const Settings = async (props: Props) => {
-  const authUser = await currentUser();
-  if (!authUser) return null;
+  if (!clerkUser) {
+    return null;
+  }
+
+  const user = await getUserByClerkId(clerkUser.id);
 
   return (
     <div className="flex flex-col gap-4">
@@ -23,11 +31,19 @@ const Settings = async (props: Props) => {
           </p>
         </div>
         <ProfilePicture
+          userClerkId={user?.clerkId || ""}
           onDelete={removeProfileImage}
           userImage={user?.profileImage || ""}
           onUpload={uploadProfileImage}
         />
-        <ProfileForm user={user} onUpdate={updateUserInfo} />
+        <ProfileForm
+          user={{
+            name: user?.name || "",
+            email: user?.email || "",
+            clerkId: user?.clerkId || "",
+          }}
+          onUpdate={updateUserInfo}
+        />
       </div>
     </div>
   );
