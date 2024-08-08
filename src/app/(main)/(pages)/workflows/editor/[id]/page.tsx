@@ -1,15 +1,14 @@
+import WorfklowEditorCanvas from "@/components/reactflow/workflows/workflow-editor-canvas";
 import { ConnectionsProvider } from "@/providers/connections-provider";
 import EditorProvider from "@/providers/editor-provider";
 import React from "react";
-// import EditorCanvas from "./_components/editor-canvas";
 
 const WorkflowsEditorPage = () => {
   return (
     <div className="h-full">
       <EditorProvider>
         <ConnectionsProvider>
-          <></>
-          {/* <EditorCanvas /> */}
+          <WorfklowEditorCanvas />
         </ConnectionsProvider>
       </EditorProvider>
     </div>

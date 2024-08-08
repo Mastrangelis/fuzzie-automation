@@ -1,14 +1,14 @@
 "use client";
-import React, { useRef } from "react";
+import React, { CSSProperties, useRef } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
 import Image from "next/image";
 
-export const ContainerScroll = ({
-  titleComponent,
-}: {
+type ContainerScrollProps = {
   titleComponent: string | React.ReactNode;
-}) => {
-  const containerRef = useRef<any>(null);
+};
+
+export const ContainerScroll = ({ titleComponent }: ContainerScrollProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
   });

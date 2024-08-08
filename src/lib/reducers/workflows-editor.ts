@@ -102,6 +102,21 @@ export const editorReducer = (
           selectedNode: action.payload.element,
         },
       };
+    case "DELETE_ELEMENT":
+      return {
+        ...state,
+        editor: {
+          ...state.editor,
+          edges: state.editor.edges.filter(
+            (e) =>
+              e.source !== action.payload.nodeId &&
+              e.target !== action.payload.nodeId
+          ),
+          elements: state.editor.elements.filter(
+            (n) => n.id !== action.payload.nodeId
+          ),
+        },
+      };
     default:
       return state;
   }

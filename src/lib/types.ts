@@ -83,12 +83,20 @@ type SelectedElementAction = {
   };
 };
 
+type DeleteElementAction = {
+  type: "DELETE_ELEMENT";
+  payload: {
+    nodeId: string;
+  };
+};
+
 export type EditorActions =
   | LoadDataAction
   | UpdateNodeAction
   | RedoAction
   | UndoAction
-  | SelectedElementAction;
+  | SelectedElementAction
+  | DeleteElementAction;
 
 export const nodeMapper: Record<string, string> = {
   Notion: "notionNode",

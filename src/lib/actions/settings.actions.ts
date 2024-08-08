@@ -5,7 +5,10 @@ import { db } from "../db";
 export const getUserByClerkId = async (clerkId: string) => {
   try {
     const user = await db.user.findUnique({
-      where: { clerkId: clerkId },
+      where: { clerkId },
+      include: {
+        connections: true,
+      },
     });
 
     if (!user) {

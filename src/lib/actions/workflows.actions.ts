@@ -19,7 +19,7 @@ export const getGoogleListener = async () => {
     },
   });
 
-  return listener || {};
+  return listener || { googleResourceId: null };
 };
 
 export const onWorkflowPublish = async (workflowId: string, state: boolean) => {
@@ -194,4 +194,24 @@ export const onGetNodesEdges = async (flowId: string) => {
   });
 
   return nodesEdges || {};
+};
+
+export const onCreateNodesEdges = async (
+  flowId: string,
+  nodes: string,
+  edges: string,
+  flowPath: string
+) => {
+  const flow = await db.workflows.update({
+    where: {
+      id: flowId,
+    },
+    data: {
+      nodes,
+      edges,
+      flowPath: flowPath,
+    },
+  });
+
+  return { message: flow ? "Workflow saved" : "Oops! try again" };
 };
