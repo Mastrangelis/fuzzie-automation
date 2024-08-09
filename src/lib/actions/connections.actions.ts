@@ -240,12 +240,13 @@ export const getNotionDatabase = async (
 export const onCreateNewPageInDatabase = async (
   databaseId: string,
   accessToken: string,
-  content: string
+  content: string | { name: string; [x: string]: string }
 ) => {
   const notion = new Client({
     auth: accessToken,
   });
 
+  console.log({ content });
   const response = await notion.pages.create({
     parent: {
       type: "database_id",
@@ -255,7 +256,7 @@ export const onCreateNewPageInDatabase = async (
       name: [
         {
           text: {
-            content: content,
+            content: typeof content === "string" ? content : content?.name,
           },
         },
       ],

@@ -25,6 +25,7 @@ import {
 import { useFuzzieStore } from "@/lib/store";
 import RenderConnectionAccordion from "@/components/accordions/connection-accordion";
 import RenderOutputAccordion from "@/components/accordions/output-accordion";
+import clsx from "clsx";
 
 type Props = {
   nodes: EditorNodeType[];
@@ -33,6 +34,7 @@ type Props = {
 const EditorCanvasSidebar = ({ nodes }: Props) => {
   const { state } = useEditor();
   const { nodeConnection } = useNodeConnections();
+  const [activeTab, setActiveTab] = React.useState("actions");
 
   const { googleFile, setSlackChannels } = useFuzzieStore();
 
@@ -54,9 +56,24 @@ const EditorCanvasSidebar = ({ nodes }: Props) => {
   return (
     <aside>
       <Tabs defaultValue="actions" className="h-screen overflow-scroll pb-24">
-        <TabsList className="bg-transparent">
-          <TabsTrigger value="actions">Actions</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsList className="bg-transparent relative w-full flex items-center justify-start">
+          <TabsTrigger value="actions" onClick={() => setActiveTab("actions")}>
+            Actions
+          </TabsTrigger>
+          <TabsTrigger
+            value="settings"
+            onClick={() => setActiveTab("settings")}
+          >
+            Settings
+          </TabsTrigger>
+          <div
+            className={clsx({
+              "absolute rounded-xl bottom-0 border-b border-b-purple-600 left-0 h-3 transition-all duration-500 ease-in-out":
+                true,
+              "w-[54px] left-3.5 h-2": activeTab === "actions",
+              "h-2 w-[60px] left-[88px]": activeTab === "settings",
+            })}
+          />
         </TabsList>
         <Separator />
         <TabsContent value="actions" className="flex flex-col gap-4 p-4">
@@ -85,36 +102,44 @@ const EditorCanvasSidebar = ({ nodes }: Props) => {
               </Card>
             ))}
         </TabsContent>
-        <TabsContent value="settings" className="-mt-6">
-          <div className="px-2 py-4 text-center text-xl font-bold">
-            {state.editor.selectedNode.data.title}
-          </div>
+        <TabsContent value="settings" className="-mt-6 h-full">
+          {state.editor.selectedNode.data.title ? (
+            <>
+              <div className="px-2 py-4 text-center text-xl font-bold">
+                {state.editor.selectedNode.data.title}
+              </div>
 
-          <Accordion type="multiple">
-            <AccordionItem value="Options" className="border-y-[1px] px-2">
-              <AccordionTrigger className="!no-underline">
-                Account
-              </AccordionTrigger>
-              <AccordionContent>
-                {CONNECTIONS.map((connection) => (
-                  <RenderConnectionAccordion
-                    key={connection.title}
+              <Accordion type="multiple" aria-expanded>
+                <AccordionItem value="Options" className="border-y-[1px] px-2">
+                  <AccordionTrigger className="!no-underline">
+                    Account
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    {CONNECTIONS.map((connection) => (
+                      <RenderConnectionAccordion
+                        key={connection.title}
+                        state={state}
+                        connection={connection}
+                      />
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="Expected Output" className="px-2">
+                  <AccordionTrigger className="!no-underline">
+                    Action
+                  </AccordionTrigger>
+                  <RenderOutputAccordion
                     state={state}
-                    connection={connection}
+                    nodeConnection={nodeConnection}
                   />
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="Expected Output" className="px-2">
-              <AccordionTrigger className="!no-underline">
-                Action
-              </AccordionTrigger>
-              <RenderOutputAccordion
-                state={state}
-                nodeConnection={nodeConnection}
-              />
-            </AccordionItem>
-          </Accordion>
+                </AccordionItem>
+              </Accordion>
+            </>
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <p>Select a node to do an action.</p>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </aside>

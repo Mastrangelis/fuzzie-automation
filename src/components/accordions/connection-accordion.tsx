@@ -8,29 +8,6 @@ import { EditorState } from "@/lib/reducers/workflows-editor";
 import ConnectionCard from "../cards/connections/connection-card";
 import MultipleSelector from "../ui/multiple-select";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
 type Props = {
   connection: Connection;
   state: EditorState;
@@ -71,7 +48,7 @@ const RenderConnectionAccordion = ({ connection, state }: Props) => {
             connected={{ [title]: isConnected }}
           />
           {slackSpecial && isConnected && (
-            <div className="p-6 relative pb-40">
+            <div className="p-6 relative pb-36">
               {slackChannels?.length ? (
                 <>
                   <div className="mb-4 ml-1">

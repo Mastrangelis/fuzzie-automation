@@ -35,6 +35,7 @@ import { EditorCanvasDefaultCardTypes } from "@/lib/constants";
 import FlowInstance from "./flow-instance";
 import Loader from "@/components/icons/loader";
 import EditorCanvasSidebar from "./worfklow-editor-canvas-sidebar";
+import { onGetNodesEdges } from "@/lib/actions/workflows.actions";
 
 const initialNodes: EditorNodeType[] = [];
 
@@ -148,21 +149,12 @@ const WorfklowEditorCanvas = () => {
     });
   };
 
-  const onNodeDelete = useCallback(
-    (nodeId: string) => {
-      setNodes((nds) => nds.filter((node) => node.id !== nodeId));
-      setEdges((eds) =>
-        eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
-      );
-      dispatch({
-        type: "DELETE_ELEMENT",
-        payload: {
-          nodeId,
-        },
-      });
-    },
-    [setNodes, setEdges]
-  );
+  const onNodeDelete = (nodeId: string) => {
+    setNodes((nds) => nds.filter((node) => node.id !== nodeId));
+    setEdges((eds) =>
+      eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+    );
+  };
 
   useEffect(() => {
     dispatch({ type: "LOAD_DATA", payload: { edges, elements: nodes } });
@@ -209,6 +201,37 @@ const WorfklowEditorCanvas = () => {
     }),
     []
   );
+
+  console.log(state.editor.edges);
+
+  const onGetWorkflow = async () => {
+    setIsWorkFlowLoading(true);
+    try {
+      const response = await onGetNodesEdges(pathname.split("/").pop()!);
+
+      if (!response) return;
+
+      response?.edges && setEdges(JSON.parse(response.edges));
+      response?.nodes && setNodes(JSON.parse(response.nodes));
+      toast({
+        title: "Success",
+        description: "Workflow loaded successfully",
+        variant: "success",
+      });
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Something went wrong loading workflow.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsWorkFlowLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    onGetWorkflow();
+  }, []);
 
   return (
     <ResizablePanelGroup direction="horizontal">

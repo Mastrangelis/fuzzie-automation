@@ -193,7 +193,7 @@ export const onGetNodesEdges = async (flowId: string) => {
     },
   });
 
-  return nodesEdges || {};
+  return nodesEdges;
 };
 
 export const onCreateNodesEdges = async (

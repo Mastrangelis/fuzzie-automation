@@ -18,6 +18,13 @@ import { useToast } from "@/components/ui/use-toast";
 import ActionButton from "@/components/buttons/workflows/action-button";
 import GoogleDriveFiles from "./google-drive-files";
 import GoogleFileDetails from "./google-file-details";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   nodeConnection: ConnectionProviderProps;
@@ -37,6 +44,8 @@ const ContentBasedOnTitle = ({
   setSelectedSlackChannels,
 }: Props) => {
   const { toast } = useToast();
+  const [files, setFiles] = React.useState<any[]>([]);
+  const [selectedFiles, setSelectedFiles] = React.useState<any[]>([]);
   const { selectedNode } = newState.editor;
   const title = selectedNode.data.title;
 
@@ -56,13 +65,7 @@ const ContentBasedOnTitle = ({
           return;
         }
 
-        toast({
-          title: "Success",
-          description: "File fetched",
-          variant: "success",
-        });
-
-        setFile(response.data.message.files[0]);
+        setFiles(response.data.message.files);
       } catch (e) {
         toast({
           title: "Error",
@@ -118,18 +121,59 @@ const ContentBasedOnTitle = ({
             onChange={(event) => onContentChange(nodeConnection, title, event)}
           />
 
-          {JSON.stringify(file) !== "{}" && title !== "Google Drive" && (
+          {title !== "Google Drive" && (
             <Card className="w-full">
               <CardContent className="px-2 py-3">
                 <div className="flex flex-col gap-4">
-                  <CardDescription>Drive File</CardDescription>
-                  <div className="flex flex-wrap gap-2">
-                    <GoogleFileDetails
-                      nodeConnection={nodeConnection}
-                      title={title}
-                      gFile={file}
-                    />
-                  </div>
+                  {files?.length ? (
+                    <>
+                      <div className="mb-2 ml-1">
+                        Select the goodle drive files to send notification and
+                        messages
+                      </div>
+                      <Select
+                        onValueChange={(fileName) => {
+                          const selectedFile = files.find(
+                            (file) => file.name === fileName
+                          );
+                          if (selectedFile) {
+                            setFile(selectedFile);
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="w-full focus:ring-0 focus:ring-offest-0 ">
+                          <SelectValue placeholder="Select google drive file" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from(new Set(files)).map((file) => (
+                            <SelectItem
+                              key={file.id}
+                              value={file.name}
+                              className="line-clamp-1"
+                            >
+                              {file.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </>
+                  ) : (
+                    "No Google drive files found. Please add your Slack bot to your Slack channel"
+                  )}
+
+                  {JSON.stringify(file) !== "{}" && (
+                    <div className="flex flex-col gap-4">
+                      <CardDescription>Drive File</CardDescription>
+
+                      <div className="flex flex-col gap-2 w-full">
+                        <GoogleFileDetails
+                          nodeConnection={nodeConnection}
+                          title={title}
+                          gFile={file}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

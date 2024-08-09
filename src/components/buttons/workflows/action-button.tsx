@@ -86,7 +86,7 @@ const ActionButton = ({
         channels!,
         nodeConnection.slackNode.content
       );
-      debugger;
+
       if (response.message == "Success") {
         toast({
           title: "Success",

@@ -60,18 +60,25 @@ const EditorCanvasCardSingle = ({ data, onNodeDelete }: Props) => {
       )}
       <Card
         onClick={onCardClick}
-        className="relative max-w-[400px] dark:border-muted-foreground/70"
+        className={clsx({
+          "relative max-w-[400px] border": true,
+          "border-muted-foreground/50":
+            nodeId !== state.editor.selectedNode?.id,
+          "border-4 border-muted-foreground":
+            nodeId === state.editor.selectedNode?.id,
+        })}
       >
         <CardHeader className="flex flex-row items-center gap-4">
           <div>{logo}</div>
           <div>
             <CardTitle className="text-md">{data.title}</CardTitle>
             <CardDescription>
-              <p className="text-xs text-muted-foreground/50">
+              <span className="text-xs text-muted-foreground/50">
                 <b className="text-muted-foreground/80">ID: </b>
                 {nodeId}
-              </p>
-              <p>{data.description}</p>
+              </span>
+              <br />
+              <span>{data.description}</span>
             </CardDescription>
           </div>
         </CardHeader>

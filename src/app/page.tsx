@@ -9,7 +9,6 @@ import { clients, products } from "@/lib/constants";
 import { CheckIcon } from "lucide-react";
 
 export default function Home() {
-  //WIP: remove fault IMAge for home page
   return (
     <main className="flex items-center justify-center flex-col mb-5 md:mb-12 overflow-x-hidden">
       <Navbar />

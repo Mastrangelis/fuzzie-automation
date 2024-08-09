@@ -9,7 +9,7 @@ import { Plus } from "lucide-react";
 import React, { ButtonHTMLAttributes, forwardRef, useEffect } from "react";
 
 type WorkflowButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  triggerClick?: boolean;
+  triggerclick?: boolean;
 };
 
 const WorkflowButton: React.FC<WorkflowButtonProps> = (props) => {
@@ -28,10 +28,10 @@ const WorkflowButton: React.FC<WorkflowButtonProps> = (props) => {
   };
 
   useEffect(() => {
-    if (props?.triggerClick) {
+    if (props?.triggerclick) {
       handleClick();
     }
-  }, [props?.triggerClick]);
+  }, [props?.triggerclick]);
 
   return (
     <Button
